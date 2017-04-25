@@ -1,0 +1,24 @@
+--cpu Cortex-M3
+"servo_pwm\system_stm32f1xx.o"
+"servo_pwm\startup_stm32f105xc.o"
+"servo_pwm\stm32f1xx_hal_dma.o"
+"servo_pwm\stm32f1xx_hal_cortex.o"
+"servo_pwm\stm32f1xx_hal_tim.o"
+"servo_pwm\stm32f1xx_hal_rcc.o"
+"servo_pwm\stm32f1xx_hal_rcc_ex.o"
+"servo_pwm\stm32f1xx_hal_gpio_ex.o"
+"servo_pwm\stm32f1xx_hal_gpio.o"
+"servo_pwm\stm32f1xx_hal_pwr.o"
+"servo_pwm\stm32f1xx_hal_flash_ex.o"
+"servo_pwm\stm32f1xx_hal.o"
+"servo_pwm\stm32f1xx_hal_flash.o"
+"servo_pwm\stm32f1xx_hal_tim_ex.o"
+"servo_pwm\stm32f1xx_hal_msp.o"
+"servo_pwm\main.o"
+"servo_pwm\stm32f1xx_it.o"
+"servo_pwm\timers.o"
+"servo_pwm\buttons.o"
+--library_type=microlib --strict --scatter "Servo_PWM\Servo_PWM.sct"
+--diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Servo_PWM.map" -o Servo_PWM\Servo_PWM.axf
