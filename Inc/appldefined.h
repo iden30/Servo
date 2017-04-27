@@ -6,21 +6,27 @@
 
 #define BUT_DEBOUNCE 80
 
-enum state_machine
+typedef struct t_state_maschine
+{
+  uint16_t state;
+  uint16_t mode;
+}t_maschine;
+
+typedef enum 
 {
     MODE_OFF = 0,
     MODE_L,
     MODE_M,
-    MODE_H
-}; 
+    MODE_H, 
+    MODE_F
+} t_mode; 
 
-
-typedef struct 
+// состояние  (активен, неактивен, недоступен)
+typedef enum
 {
-    uint16_t mode;   
-}t_mode;
-
-t_mode drive = {MODE_OFF};
-
+    STATE_MASCHINE_OFF = 0x00,
+    STATE_MASCHINE_ON  = 0x01,
+    STATE_MASCHINE_NA  = 0x02
+} m_state_t;
 
 #endif

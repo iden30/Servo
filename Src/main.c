@@ -42,7 +42,7 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-
+t_maschine maschine;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -91,7 +91,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-
+    maschine.mode = MODE_L;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -114,50 +114,71 @@ int main(void)
                  GPIO_PIN_RESET == HAL_GPIO_ReadPin(But_Mode_GPIO_Port, But_Mode_Pin)              
              )
           {
-              sts_but = true;
-
-              switch (drive.mode)
+              sts_but = true; 
+              ;
+          
+              switch (maschine.mode)
               {
                   case MODE_OFF:
-                  {
-                      drive.mode = MODE_L;
-                      set_pwm_tim2_ch4_duty (20); 
-                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET);
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
-                  } break;
+                     
+                     maschine.mode  = MODE_L;
+                     maschine.state = STATE_MASCHINE_ON;
+                     pwm_on();
+                     set_pwm_tim2_ch4_duty (25);
+                     HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
+                     HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
+                     HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );
+                     break;
                   
                   case MODE_L:
-                  {
-                      drive.mode = MODE_M;
-                      set_pwm_tim2_ch4_duty (50);
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET);
+                  
+                      maschine.mode  = MODE_M;
+                      maschine.state = STATE_MASCHINE_ON;
+                      pwm_on();
+                      set_pwm_tim2_ch4_duty (50); 
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);                      
-                  } break;
+                      break;
                   
                   case MODE_M:
-                  {
-                      drive.mode = MODE_H;
-                      set_pwm_tim2_ch4_duty (100); 
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET);
-                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET); 
-                  } break;
+                 
+                      maschine.mode  = MODE_H;
+                      maschine.state = STATE_MASCHINE_ON;
+                      pwm_on();
+                      set_pwm_tim2_ch4_duty (75);
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
+                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);                      
+                      break;
                   
                   case MODE_H:
-                  {
-                      drive.mode = MODE_OFF;
-                      set_pwm_tim2_ch4_duty (0);
-
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET); 
-                  } break;
                   
+                      maschine.mode  = MODE_F;
+                      maschine.state = STATE_MASCHINE_ON;
+                      pwm_on();
+                      set_pwm_tim2_ch4_duty (100); 
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET); 
+                      break;
+                  
+                  case MODE_F:
+                  
+                      maschine.mode  = MODE_OFF;
+                      maschine.state = STATE_MASCHINE_OFF;
+                      pwm_off();
+                      set_pwm_tim2_ch4_duty (0); 
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET); 
+                      break;
+                           
                   default:
                       break;
               }   
+
+
           }  
         }
       if (
@@ -172,9 +193,9 @@ int main(void)
              sts_but = false;
           }
       }
-   }
       
-
+      
+   }
 }
 
 /** System Clock Configuration

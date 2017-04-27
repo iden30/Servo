@@ -1,8 +1,8 @@
 servo_pwm\timers.o: ..\Src\timers.c
 servo_pwm\timers.o: ../Inc/timers.h
-servo_pwm\timers.o: ../Inc/main.h
 servo_pwm\timers.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 servo_pwm\timers.o: ../Inc/stm32f1xx_hal_conf.h
+servo_pwm\timers.o: ../Inc/main.h
 servo_pwm\timers.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
 servo_pwm\timers.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
 servo_pwm\timers.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h

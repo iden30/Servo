@@ -3,6 +3,7 @@
 #include "appldefined.h"
 
 TIM_HandleTypeDef htim2;
+static void Error_Handler(void);
 
 /* TIM2 init function */
 void MX_TIM2_Init(void)
@@ -51,7 +52,7 @@ void MX_TIM2_Init(void)
 
   HAL_TIM_MspPostInit(&htim2);
   
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+  
 
 }
 
@@ -93,5 +94,13 @@ void set_pwm_tim2_ch4_duty (uint32_t Precent)
   TIM2->CCR4 = (((1000 * Precent) / 100) + 1000);
 }
 
+void pwm_on (void)
+{
+    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+}
 
+void pwm_off (void)
+{
+    HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
+}
 
