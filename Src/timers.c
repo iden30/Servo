@@ -14,7 +14,7 @@ void MX_TIM2_Init(void)
   TIM_OC_InitTypeDef sConfigOC;
 
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 48;
+  htim2.Init.Prescaler = 47;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 20000;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -42,7 +42,7 @@ void MX_TIM2_Init(void)
   }
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 1;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
@@ -67,12 +67,18 @@ static void Error_Handler(void)
 bool delay_ms (uint32_t Delay)
 {
     static uint32_t start_tick = 0;
-    start_tick = HAL_GetTick();
-    if ((HAL_GetTick() - start_tick) == Delay)
+
+    if (start_tick == 0) 
+    {
+    	start_tick = HAL_GetTick();
+    }
+
+    else if ((HAL_GetTick() - start_tick) == Delay)
     {
       start_tick = 0;
       return true;
     }  
+
     return false;
 }
 
@@ -80,18 +86,24 @@ bool delay_ms (uint32_t Delay)
 bool debounce_ms(uint32_t Debounce)
 {
     static uint32_t start_tick = 0;
-    start_tick = HAL_GetTick();
-    if ((HAL_GetTick() - start_tick) == Debounce)
+    if (start_tick == 0)
+    {
+    	start_tick = HAL_GetTick();
+    }
+
+    else if ((HAL_GetTick() - start_tick) == Debounce)
     {
       start_tick = 0;
       return true;
     }  
+    
     return false;
 }
 
 void set_pwm_tim2_ch4_duty (uint32_t Precent)
 {
-  TIM2->CCR4 = (((1000 * Precent) / 100) + 1000);
+    if (0 == Precent) Precent = 1;
+    TIM2->CCR4 = (((1000 * Precent) / 100) + 1000);
 }
 
 void pwm_on (void)

@@ -8,7 +8,15 @@
 #include "timers.h"
 #include "stm32f1xx_it.h"
 
-extern bool get_button (void);
+typedef enum 
+{
+    BUT_NONE = 0,
+    BUT_STOP,
+    BUT_MODE,
+} t_but;
+
+
+extern uint16_t get_button (void);
 
 
 #endif
