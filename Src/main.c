@@ -28,12 +28,14 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_NVIC_Init();
-  HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
-  maschine.mode = MODE_OFF;
   
+  maschine.mode = MODE_OFF;
+    
+  HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET); 
   pwm_on();
   set_pwm_tim2_ch4_duty (0); 
     
+  //while(false == delay_ms(3000)){};  
 while (1)
   {
       static bool sts_but_mode = false;
@@ -50,6 +52,16 @@ while (1)
           sts_but_stop = true;
       }
       
+//      if (
+//            (false != delay_ms(15000))
+//         )
+//      {
+//          if (maschine.mode == MODE_OFF)
+//          {
+//              HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_RESET);
+//          }              
+//          
+//      }
  //========================================== кнопка MODE ================================================     
 
       if (sts_but_mode == true && false != delay_ms(BUT_DEBOUNCE))
@@ -61,18 +73,21 @@ while (1)
               switch (maschine.mode)
               {
                   case MODE_OFF:
-                     
+                     HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                      maschine.mode  = MODE_L;
                      maschine.state = STATE_MASCHINE_ON;
-                     pwm_on();
-                     set_pwm_tim2_ch4_duty (35);
+                     
                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
+                  
+                     pwm_on();
+                     set_pwm_tim2_ch4_duty (35);
+                         
                      break;
                   
                   case MODE_L:
-                  
+                      HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                       maschine.mode  = MODE_M;
                       maschine.state = STATE_MASCHINE_ON;
                       pwm_on();
@@ -83,7 +98,7 @@ while (1)
                       break;
                   
                   case MODE_M:
-                 
+                      HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                       maschine.mode  = MODE_H;
                       maschine.state = STATE_MASCHINE_ON;
                       pwm_on();
@@ -94,7 +109,7 @@ while (1)
                       break;
                   
                   case MODE_H:
-                  
+                      HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                       maschine.mode  = MODE_F;
                       maschine.state = STATE_MASCHINE_ON;
                       pwm_on();
@@ -149,6 +164,7 @@ while (1)
       }
       
  //========================================================================================================
+      
    }
 }
 
@@ -231,7 +247,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, Led_R_Pin|Led_G_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, Led_B_Pin|PWR_REMOUTE_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, Led_B_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : But_Stop_Pin But_Mode_Pin */
   GPIO_InitStruct.Pin = But_Stop_Pin|But_Mode_Pin;
