@@ -109,6 +109,11 @@ while (1)
                       HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                       maschine.mode  = MODE_M;
                       maschine.state = STATE_MASCHINE_ON;
+
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );
+                      
                       pwm_on();
                   
                       for (pwm_duty = 35; pwm_duty < 50; pwm_duty++) 
@@ -117,15 +122,17 @@ while (1)
                           HAL_Delay(SPEED); // 60 милсек
                       }
                       
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );
                       break;
                   
                   case MODE_M:
                       HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                       maschine.mode  = MODE_H;
                       maschine.state = STATE_MASCHINE_ON;
+
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );                      
+                      
                       pwm_on();
                   
                       for (pwm_duty = 50; pwm_duty < 70; pwm_duty++) 
@@ -134,15 +141,17 @@ while (1)
                           HAL_Delay(SPEED); // 60 милсек
                       }
                       
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );                      
                       break;
                   
                   case MODE_H:
                       HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_SET);
                       maschine.mode  = MODE_F;
                       maschine.state = STATE_MASCHINE_ON;
+                      
+                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
+                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
+                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  ); 
+                      
                       pwm_on();
                       
                       for (pwm_duty = 70; pwm_duty < 100; pwm_duty++) 
@@ -151,9 +160,6 @@ while (1)
                           HAL_Delay(SPEED); // 60 милсек
                       }
                       
-                      HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
-                      HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
-                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  ); 
                       break;
                   
                   case MODE_F:
