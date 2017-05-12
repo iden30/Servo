@@ -1,9 +1,13 @@
 
 #include "timers.h" 
 #include "appldefined.h"
+#include "buttons.h"
+
 
 TIM_HandleTypeDef htim2;
 static void Error_Handler(void);
+
+
 
 /* TIM2 init function */
 void MX_TIM2_Init(void)
@@ -67,37 +71,84 @@ static void Error_Handler(void)
 bool delay_ms (uint32_t Delay)
 {
     static uint32_t start_tick = 0;
+    bool result = false;
 
     if (start_tick == 0) 
     {
     	start_tick = HAL_GetTick();
     }
 
-    else if ((HAL_GetTick() - start_tick) == Delay)
+    else 
+    if ((HAL_GetTick() - start_tick) == Delay)
     {
       start_tick = 0;
-      return true;
+      result = true;
     }  
 
-    return false;
+    return result;
 }
 
 
-bool debounce_ms(uint32_t Debounce)
+bool debounce_ms(uint32_t debounce, device_t *device)
 {
-    static uint32_t start_tick = 0;
-    if (start_tick == 0)
-    {
-    	start_tick = HAL_GetTick();
-    }
-
-    else if ((HAL_GetTick() - start_tick) == Debounce)
-    {
-      start_tick = 0;
-      return true;
-    }  
+    bool result = false;
     
-    return false;
+    if (device->button == BUT_MODE)
+    {
+        static uint32_t start_tick = 0;
+        
+        if (device->debounce == 0) 
+        {
+            device->debounce = debounce;
+        }
+        
+        else
+        if (device->debounce > 0)
+        {
+            if (start_tick == 0)
+            {
+                start_tick = HAL_GetTick();
+            }
+
+            else if ((HAL_GetTick() - start_tick) == device->debounce)
+            {
+              start_tick = 0;
+              device->debounce = 0;
+              result = true;
+            }  
+        }
+    }
+    
+    else
+    if (device->button == BUT_STOP)
+    {
+        static uint32_t start_tick = 0;
+        
+        if (device->debounce == 0) 
+        {
+            device->debounce = debounce;
+        }
+        
+        else
+        if (device->debounce > 0)
+        {
+            if (start_tick == 0)
+            {
+                start_tick = HAL_GetTick();
+            }
+
+            else if ((HAL_GetTick() - start_tick) == device->debounce)
+            {
+              start_tick = 0;
+              device->debounce = 0;
+              result = true;
+            }  
+        }
+    }
+    
+    
+    
+    return result;
 }
 
 void set_pwm_tim2_ch4_duty (uint32_t Precent)

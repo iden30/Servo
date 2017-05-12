@@ -31,3 +31,5 @@ servo_pwm\timers.o: ../Inc/types.h
 servo_pwm\timers.o: C:\Keil\ARM\ARMCC\Bin\..\include\stddef.h
 servo_pwm\timers.o: C:\Keil\ARM\ARMCC\Bin\..\include\stdbool.h
 servo_pwm\timers.o: ../Inc/appldefined.h
+servo_pwm\timers.o: ../Inc/buttons.h
+servo_pwm\timers.o: ../Inc/stm32f1xx_it.h

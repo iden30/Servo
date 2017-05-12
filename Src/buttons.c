@@ -4,6 +4,9 @@
 static bool sts_button = false;
 static uint16_t but = BUT_NONE;
 
+
+
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   UNUSED(GPIO_Pin);

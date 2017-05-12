@@ -14,12 +14,15 @@
 #include "buttons.h"
 #include "appldefined.h"
 
+#define SPEED      60          
 t_maschine maschine;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_NVIC_Init(void);                                    
                                 
+device_t button_mode;
+device_t button_stop;
 
 int main(void)
 {
@@ -40,7 +43,9 @@ while (1)
   {
       static bool sts_but_mode = false;
       static bool sts_but_stop = false;
-
+      static uint32_t pwm_duty = 0;
+     button_mode.button = BUT_MODE;
+     button_stop.button = BUT_STOP;
 
       if (BUT_MODE == get_button())
       {          
@@ -52,24 +57,34 @@ while (1)
           sts_but_stop = true;
       }
       
-//      if (
-//            (false != delay_ms(15000))
-//         )
-//      {
-//          if (maschine.mode == MODE_OFF)
-//          {
-//              HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_RESET);
-//          }              
-//          
-//      }
+      if (
+              (false != delay_ms(10000))
+           && (maschine.mode == MODE_OFF)
+         )
+      {
+          HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
+          HAL_Delay(50);
+          HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
+          HAL_Delay(200);
+          HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
+          HAL_Delay(50);
+          HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
+          HAL_Delay(200);
+          HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
+          HAL_Delay(50);
+          HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );
+          
+          HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_RESET);
+      }
+      
  //========================================== кнопка MODE ================================================     
 
-      if (sts_but_mode == true && false != delay_ms(BUT_DEBOUNCE))
+      if (sts_but_mode == true && false != debounce_ms(BUT_DEBOUNCE, &button_mode))
       {   
           if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(But_Mode_GPIO_Port, But_Mode_Pin))
           {
               sts_but_mode = false; 
-          
+              
               switch (maschine.mode)
               {
                   case MODE_OFF:
@@ -82,7 +97,11 @@ while (1)
                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
                   
                      pwm_on();
-                     set_pwm_tim2_ch4_duty (35);
+                     for (pwm_duty = 0; pwm_duty < 35; pwm_duty++) // 2,1 сек
+                     {
+                         set_pwm_tim2_ch4_duty (pwm_duty);
+                         HAL_Delay(SPEED); // 60 милсек
+                     }
                          
                      break;
                   
@@ -91,7 +110,13 @@ while (1)
                       maschine.mode  = MODE_M;
                       maschine.state = STATE_MASCHINE_ON;
                       pwm_on();
-                      set_pwm_tim2_ch4_duty (50); 
+                  
+                      for (pwm_duty = 35; pwm_duty < 50; pwm_duty++) 
+                      {
+                          set_pwm_tim2_ch4_duty (pwm_duty);
+                          HAL_Delay(SPEED); // 60 милсек
+                      }
+                      
                       HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET  );
                       HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );
@@ -102,7 +127,13 @@ while (1)
                       maschine.mode  = MODE_H;
                       maschine.state = STATE_MASCHINE_ON;
                       pwm_on();
-                      set_pwm_tim2_ch4_duty (70);
+                  
+                      for (pwm_duty = 50; pwm_duty < 70; pwm_duty++) 
+                      {
+                          set_pwm_tim2_ch4_duty (pwm_duty);
+                          HAL_Delay(SPEED); // 60 милсек
+                      }
+                      
                       HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
                       HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_RESET);
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );                      
@@ -113,7 +144,13 @@ while (1)
                       maschine.mode  = MODE_F;
                       maschine.state = STATE_MASCHINE_ON;
                       pwm_on();
-                      set_pwm_tim2_ch4_duty (100); 
+                      
+                      for (pwm_duty = 70; pwm_duty < 100; pwm_duty++) 
+                      {
+                          set_pwm_tim2_ch4_duty (pwm_duty);
+                          HAL_Delay(SPEED); // 60 милсек
+                      }
+                      
                       HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_RESET);
                       HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET  );
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  ); 
@@ -143,7 +180,7 @@ while (1)
       
  //============================================== кнопка STOP =============================================     
       
-      if (sts_but_stop == true && false != delay_ms(BUT_DEBOUNCE))
+      if (sts_but_stop == true && false != debounce_ms(BUT_DEBOUNCE, &button_stop))
       {  
           if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(But_Stop_GPIO_Port, But_Stop_Pin))
           {
