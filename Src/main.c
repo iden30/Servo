@@ -14,9 +14,9 @@
 #include "buttons.h"
 #include "appldefined.h"
 
-#define SPEED      60          
+        
 t_maschine maschine;
-
+static uint32_t pwm_mode = 0;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_NVIC_Init(void);                                    
@@ -43,7 +43,7 @@ while (1)
   {
       static bool sts_but_mode = false;
       static bool sts_but_stop = false;
-      static uint32_t pwm_duty = 0;
+    
      button_mode.button = BUT_MODE;
      button_stop.button = BUT_STOP;
 
@@ -77,6 +77,9 @@ while (1)
           HAL_GPIO_WritePin(PWR_REMOUTE_GPIO_Port, PWR_REMOUTE_Pin, GPIO_PIN_RESET);
       }
       
+      
+      set_pwm_tim2_ch4_duty (pwm_mode);
+      
  //========================================== кнопка MODE ================================================     
 
       if (sts_but_mode == true && false != debounce_ms(BUT_DEBOUNCE, &button_mode))
@@ -97,12 +100,7 @@ while (1)
                      HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_RESET);
                   
                      pwm_on();
-                     for (pwm_duty = 0; pwm_duty < 35; pwm_duty++) // 2,1 сек
-                     {
-                         set_pwm_tim2_ch4_duty (pwm_duty);
-                         HAL_Delay(SPEED); // 60 милсек
-                     }
-                         
+                     pwm_mode = 35;                         
                      break;
                   
                   case MODE_L:
@@ -115,13 +113,7 @@ while (1)
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );
                       
                       pwm_on();
-                  
-                      for (pwm_duty = 35; pwm_duty < 50; pwm_duty++) 
-                      {
-                          set_pwm_tim2_ch4_duty (pwm_duty);
-                          HAL_Delay(SPEED); // 60 милсек
-                      }
-                      
+                      pwm_mode =50;
                       break;
                   
                   case MODE_M:
@@ -134,13 +126,7 @@ while (1)
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  );                      
                       
                       pwm_on();
-                  
-                      for (pwm_duty = 50; pwm_duty < 70; pwm_duty++) 
-                      {
-                          set_pwm_tim2_ch4_duty (pwm_duty);
-                          HAL_Delay(SPEED); // 60 милсек
-                      }
-                      
+                      pwm_mode = 70;
                       break;
                   
                   case MODE_H:
@@ -153,13 +139,7 @@ while (1)
                       HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET  ); 
                       
                       pwm_on();
-                      
-                      for (pwm_duty = 70; pwm_duty < 100; pwm_duty++) 
-                      {
-                          set_pwm_tim2_ch4_duty (pwm_duty);
-                          HAL_Delay(SPEED); // 60 милсек
-                      }
-                      
+                      pwm_mode = 100;
                       break;
                   
                   case MODE_F:
@@ -186,15 +166,17 @@ while (1)
       
  //============================================== кнопка STOP =============================================     
       
-      if (sts_but_stop == true && false != debounce_ms(BUT_DEBOUNCE, &button_stop))
+      if (
+              (true  == sts_but_stop) 
+           && (false != debounce_ms(BUT_DEBOUNCE, &button_stop))
+         )
       {  
           if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(But_Stop_GPIO_Port, But_Stop_Pin))
           {
+              set_pwm_tim2_ch4_duty (0); 
               sts_but_stop = false; 
               maschine.mode  = MODE_OFF;
               maschine.state = STATE_MASCHINE_OFF;
-              //pwm_off();
-              set_pwm_tim2_ch4_duty (0); 
               HAL_GPIO_WritePin(Led_R_GPIO_Port, Led_R_Pin, GPIO_PIN_SET);
               HAL_GPIO_WritePin(Led_G_GPIO_Port, Led_G_Pin, GPIO_PIN_SET);
               HAL_GPIO_WritePin(Led_B_GPIO_Port, Led_B_Pin, GPIO_PIN_SET);

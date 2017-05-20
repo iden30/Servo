@@ -3,6 +3,7 @@
 #include "appldefined.h"
 #include "buttons.h"
 
+#define SPEED      60  
 
 TIM_HandleTypeDef htim2;
 static void Error_Handler(void);
@@ -153,8 +154,10 @@ bool debounce_ms(uint32_t debounce, device_t *device)
 
 void set_pwm_tim2_ch4_duty (uint32_t Precent)
 {
+    static uint32_t pwm_duty = 0;
+    
     if (0 == Precent) Precent = 1;
-    TIM2->CCR4 = (((1000 * Precent) / 100) + 1000);
+    TIM2->CCR4 = (((1000 * Precent) / 100) + 1000);               
 }
 
 void pwm_on (void)

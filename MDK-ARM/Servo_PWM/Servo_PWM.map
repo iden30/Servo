@@ -761,16 +761,16 @@ Image Symbol Table
     i.delay_ms                               0x080016d4   Section        0  timers.o(i.delay_ms)
     i.get_button                             0x08001704   Section        0  buttons.o(i.get_button)
     i.main                                   0x0800171c   Section        0  main.o(i.main)
-    i.pwm_on                                 0x08001a28   Section        0  timers.o(i.pwm_on)
-    i.set_pwm_tim2_ch4_duty                  0x08001a34   Section        0  timers.o(i.set_pwm_tim2_ch4_duty)
-    .constdata                               0x08001a4e   Section       16  system_stm32f1xx.o(.constdata)
+    i.pwm_on                                 0x080019d8   Section        0  timers.o(i.pwm_on)
+    i.set_pwm_tim2_ch4_duty                  0x080019e4   Section        0  timers.o(i.set_pwm_tim2_ch4_duty)
+    .constdata                               0x080019fe   Section       16  system_stm32f1xx.o(.constdata)
     .data                                    0x20000000   Section        4  system_stm32f1xx.o(.data)
     .data                                    0x20000004   Section        4  stm32f1xx_hal.o(.data)
     uwTick                                   0x20000004   Data           4  stm32f1xx_hal.o(.data)
     .data                                    0x20000008   Section       12  main.o(.data)
     sts_but_mode                             0x20000008   Data           1  main.o(.data)
     sts_but_stop                             0x20000009   Data           1  main.o(.data)
-    pwm_duty                                 0x2000000c   Data           4  main.o(.data)
+    pwm_mode                                 0x2000000c   Data           4  main.o(.data)
     .data                                    0x20000014   Section       12  timers.o(.data)
     start_tick                               0x20000014   Data           4  timers.o(.data)
     start_tick                               0x20000018   Data           4  timers.o(.data)
@@ -919,12 +919,12 @@ Image Symbol Table
     debounce_ms                              0x08001669   Thumb Code   104  timers.o(i.debounce_ms)
     delay_ms                                 0x080016d5   Thumb Code    42  timers.o(i.delay_ms)
     get_button                               0x08001705   Thumb Code    18  buttons.o(i.get_button)
-    main                                     0x0800171d   Thumb Code   764  main.o(i.main)
-    pwm_on                                   0x08001a29   Thumb Code     8  timers.o(i.pwm_on)
-    set_pwm_tim2_ch4_duty                    0x08001a35   Thumb Code    26  timers.o(i.set_pwm_tim2_ch4_duty)
-    AHBPrescTable                            0x08001a4e   Data          16  system_stm32f1xx.o(.constdata)
-    Region$$Table$$Base                      0x08001a60   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08001a80   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x0800171d   Thumb Code   682  main.o(i.main)
+    pwm_on                                   0x080019d9   Thumb Code     8  timers.o(i.pwm_on)
+    set_pwm_tim2_ch4_duty                    0x080019e5   Thumb Code    26  timers.o(i.set_pwm_tim2_ch4_duty)
+    AHBPrescTable                            0x080019fe   Data          16  system_stm32f1xx.o(.constdata)
+    Region$$Table$$Base                      0x08001a10   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08001a30   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20000000   Data           4  system_stm32f1xx.o(.data)
     maschine                                 0x20000010   Data           4  main.o(.data)
     button_mode                              0x20000024   Data          12  main.o(.bss)
@@ -940,9 +940,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000151
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001aa4, Max: 0x00020000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001a54, Max: 0x00020000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00001a80, Max: 0x00020000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00001a30, Max: 0x00020000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1029,12 +1029,12 @@ Memory Map of the image
     0x08001668   0x0000006c   Code   RO         2089    i.debounce_ms       timers.o
     0x080016d4   0x00000030   Code   RO         2090    i.delay_ms          timers.o
     0x08001704   0x00000018   Code   RO         2147    i.get_button        buttons.o
-    0x0800171c   0x0000030c   Code   RO         1946    i.main              main.o
-    0x08001a28   0x0000000c   Code   RO         2092    i.pwm_on            timers.o
-    0x08001a34   0x0000001a   Code   RO         2093    i.set_pwm_tim2_ch4_duty  timers.o
-    0x08001a4e   0x00000010   Data   RO            6    .constdata          system_stm32f1xx.o
-    0x08001a5e   0x00000002   PAD
-    0x08001a60   0x00000020   Data   RO         2196    Region$$Table       anon$$obj.o
+    0x0800171c   0x000002bc   Code   RO         1946    i.main              main.o
+    0x080019d8   0x0000000c   Code   RO         2092    i.pwm_on            timers.o
+    0x080019e4   0x0000001a   Code   RO         2093    i.set_pwm_tim2_ch4_duty  timers.o
+    0x080019fe   0x00000010   Data   RO            6    .constdata          system_stm32f1xx.o
+    0x08001a0e   0x00000002   PAD
+    0x08001a10   0x00000020   Data   RO         2196    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00000478, Max: 0x00010000, ABSOLUTE)
@@ -1059,7 +1059,7 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
         56         12          0          4          0       1178   buttons.o
-      1072         44          0         12         24       3983   main.o
+       992         46          0         12         24       3867   main.o
         36          8        336          0       1024        756   startup_stm32f105xc.o
        120         16          0          4          0       3574   stm32f1xx_hal.o
        228         14          0          0          0      27349   stm32f1xx_hal_cortex.o
@@ -1070,10 +1070,10 @@ Image component sizes
         80          0          0          0          0       1268   stm32f1xx_hal_tim_ex.o
         44          0          0          0          0       4640   stm32f1xx_it.o
         84         16         16          4          0     615855   system_stm32f1xx.o
-       318         20          0         12         60       3525   timers.o
+       318         20          0         12         60       3549   timers.o
 
     ----------------------------------------------------------------------
-      6310        318        386         36       1108     685185   Object Totals
+      6230        320        386         36       1108     685093   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         14          0          2          0          0          0   (incl. Padding)
 
@@ -1112,15 +1112,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      6398        334        386         36       1108     682493   Grand Totals
-      6398        334        386         36       1108     682493   ELF Image Totals
-      6398        334        386         36          0          0   ROM Totals
+      6318        336        386         36       1108     682401   Grand Totals
+      6318        336        386         36       1108     682401   ELF Image Totals
+      6318        336        386         36          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 6784 (   6.63kB)
+    Total RO  Size (Code + RO Data)                 6704 (   6.55kB)
     Total RW  Size (RW Data + ZI Data)              1144 (   1.12kB)
-    Total ROM Size (Code + RO Data + RW Data)       6820 (   6.66kB)
+    Total ROM Size (Code + RO Data + RW Data)       6740 (   6.58kB)
 
 ==============================================================================
 
